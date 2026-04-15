@@ -24,7 +24,7 @@ export default function ActiveChat() {
     ) {
       playSound("tick");
     }
-  }, [gameState.timeLeft]);
+  }, [gameState.timeLeft, gameState.status, me]);
 
   const handleSendMessage = () => {
     if (text.trim() && canGuess) {
@@ -106,7 +106,7 @@ export default function ActiveChat() {
                 Round in progress! You are spectating. 🍿
               </p>
               <p className="text-xs text-amber-600 mt-1">
-                You'll be added to the next round in {gameState.timeLeft}s
+                You&apos;ll be added to the next round in {gameState.timeLeft}s
               </p>
             </div>
           ) : canGuess ? (

@@ -5,7 +5,14 @@ import {
   playSound,
   resumeAudio,
 } from "@/utils/audioManager";
-import { createContext, useContext, useEffect, useState, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 
@@ -15,7 +22,7 @@ export const GameProvider = ({ children }) => {
   const [gameState, setGameState] = useState(null);
   const [me, setMe] = useState(null);
   const [isConnecting, setIsConnecting] = useState(true);
-  const [hasPlayedSound, setHasPlayedSound] = useState(false); // New state to track if sound has been played
+  const hasPlayedWinSoundRef = useRef(false);
 
   // 1. Memoize socket to prevent re-initialization on every render
   const socket = useMemo(() => {
@@ -73,22 +80,20 @@ export const GameProvider = ({ children }) => {
     socket.on("gm_decision_error", (message) => toast.error(message));
 
     socket.on("left_game_master", (message) => {
-      if (me) {
-        toast.info(message);
-      }
+      toast.info(message);
     });
 
     // 3. CLEANUP: This is vital to prevent memory leaks and duplicate toasts
     return () => {
       socket.off("connect");
       socket.off("sync_state");
-      socket.off("join_success");
       socket.off("init_player");
-      socket.off("join_game_error");
+      socket.off("join_error");
       socket.off("connect_error");
       socket.off("start_error");
       socket.off("guess_error");
       socket.off("gm_decision_error");
+      socket.off("left_game_master");
     };
   }, [socket]); // Only runs once when socket is created
 
@@ -107,7 +112,7 @@ export const GameProvider = ({ children }) => {
 
   useEffect(() => {
     if (gameState?.status === "LOBBY") {
-      setHasPlayedSound(false);
+      hasPlayedWinSoundRef.current = false;
     }
   }, [gameState?.status]);
 
@@ -115,8 +120,12 @@ export const GameProvider = ({ children }) => {
     if (!gameState || !me) return;
 
     // Winner Sound
-    if (gameState.winner && !gameState.pendingGM && !hasPlayedSound) {
-      setHasPlayedSound(true);
+    if (
+      gameState.winner &&
+      !gameState.pendingGM &&
+      !hasPlayedWinSoundRef.current
+    ) {
+      hasPlayedWinSoundRef.current = true;
       playSound("success", 4);
     }
 
@@ -124,7 +133,7 @@ export const GameProvider = ({ children }) => {
     if (gameState.pendingGM === me?.id) {
       playSound("alert", 3.5);
     }
-  }, [gameState?.winner, gameState?.pendingGM, me?.id]);
+  }, [gameState, me]);
 
   const sendGuess = (text) => socket.emit("submit_guess", text);
   const joinGame = async (name) => {

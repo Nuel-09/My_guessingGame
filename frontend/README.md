@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Guessing Game Frontend
 
-## Getting Started
+Next.js client for the live multiplayer guessing game.
 
-First, run the development server:
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create `.env.local` with your backend URL:
+
+```bash
+NEXT_PUBLIC_BACKEND_URL=http://localhost:3012
+```
+
+3. Run the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploying (Vercel + External Backend)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+This project uses Socket.IO for real-time gameplay. Vercel is great for the Next.js frontend, but long-lived Socket.IO servers should run on a persistent Node host (for example Render, Railway, Fly.io, or VPS).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Deploy `backend/` to a Node host.
+2. Set backend env vars:
 
-## Learn More
+```bash
+PORT=3012
+CORS_ORIGIN=https://your-frontend-domain.vercel.app
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Deploy `frontend/` to Vercel.
+4. In Vercel project settings, add:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+NEXT_PUBLIC_BACKEND_URL=https://your-backend-domain.com
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - start local dev server
+- `npm run build` - production build
+- `npm run start` - run production build locally
+- `npm run lint` - lint project

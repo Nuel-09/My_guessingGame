@@ -35,7 +35,7 @@ export default function Scoreboard({ isOpen, onClose }) {
 
         <div className="flex-1 overflow-y-auto p-4">
           <div className="space-y-3">
-            {gameState.players
+            {[...gameState.players]
               .sort((a, b) => b.score - a.score)
               .filter((p) => p.activeInRound) // Sort by highest score
               .map((player, index) => (

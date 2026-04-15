@@ -68,16 +68,23 @@ class Players {
     this.players = this.players.filter((p) => p.id !== id);
   }
 
-  checkUsernameExists(name) {
+  checkUsernameExists(name, excludeId = null) {
     return this.players.some(
-      (p) => p.name?.toLowerCase() === name.toLowerCase(),
+      (p) =>
+        p.id !== excludeId && p.name?.toLowerCase() === name.toLowerCase(),
     );
   }
 
   // UPDATED: No more filter/concat (keeps order stable)
   reduceAttempt(id) {
     const player = this.players.find((p) => p.id === id);
-    if (player && player.attempts > 0) player.attempts -= 1;
+    if (player && player.attempts > 0) {
+      player.attempts -= 1;
+      if (player.attempts === 0) {
+        player.activeInRound = false;
+        player.spectating = true;
+      }
+    }
   }
 
   incrementScore(id) {

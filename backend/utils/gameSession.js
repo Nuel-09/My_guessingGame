@@ -36,7 +36,14 @@ class GameSession {
       return;
     }
 
-    if (this.players.checkUsernameExists(name)) {
+    const existingPlayer = this.players.players.find((p) => p.id === id);
+
+    if (this.status === "PLAYING" && !existingPlayer) {
+      socket.emit("join_error", "Game already in progress. Please wait.");
+      return;
+    }
+
+    if (this.players.checkUsernameExists(name, id)) {
       socket.emit("join_error", "Username already exists");
       return;
     }
@@ -45,12 +52,15 @@ class GameSession {
       this.gameMaster = id;
     }
 
-    const existingPlayer = this.players.players.find((p) => p.id === id);
     let response;
     if (this.status === "PLAYING") {
       if (existingPlayer) {
         existingPlayer.socket = socket; // Update socket reference for existing player
-        response = this.players.resetPlayerPartially(id, name, false);
+        response = this.players.resetPlayerPartially(
+          id,
+          name,
+          existingPlayer.activeInRound,
+        );
       } else {
         response = new Player().setSpectator({ id, name, socket });
       }
@@ -75,16 +85,36 @@ class GameSession {
   }
 
   startSession(q, a, socket) {
-    this.reset();
+    const playerId = socket.handshake.auth.sessionId;
+
+    if (this.status !== "LOBBY") {
+      socket.emit("start_error", "Session is not in lobby state");
+      return;
+    }
+
+    if (this.gameMaster !== playerId) {
+      socket.emit("start_error", "Only the Game Master can start the session");
+      return;
+    }
+
+    if (this.players.getPlayers().length < 3) {
+      socket.emit("start_error", "At least 3 players are required to start");
+      return;
+    }
+
+    const normalizedQuestion = q?.trim();
+    const normalizedAnswer = a?.trim();
+
     const response = question.setQuestionAndAnswer({
-      question: q.trim(),
-      answer: a.trim(),
+      question: normalizedQuestion,
+      answer: normalizedAnswer,
     });
     if (!response.ok) {
       socket.emit("start_error", response.error);
       return;
     }
 
+    this.reset();
     this.question = response.data.question;
     this.answer = response.data.answer;
 
@@ -129,14 +159,33 @@ class GameSession {
       return;
     }
 
+    if (player.id === this.gameMaster) {
+      response = formatResponse(null, "Game Master cannot submit guesses");
+      socket.emit("guess_error", response.error);
+      return;
+    }
+
+    if (player.attempts <= 0) {
+      response = formatResponse(null, "No attempts left in this round");
+      socket.emit("guess_error", response.error);
+      return;
+    }
+
+    const normalizedGuess = guess?.trim();
+    if (!normalizedGuess) {
+      response = formatResponse(null, "Guess cannot be empty");
+      socket.emit("guess_error", response.error);
+      return;
+    }
+
     const message = {
       userId: player.id,
       userName: player.name,
-      text: guess,
+      text: normalizedGuess,
     };
     this.messages.push(message);
 
-    if (question.isAnswer(guess)) {
+    if (question.isAnswer(normalizedGuess)) {
       this.players.incrementScore(playerId);
       this.winner = player;
       this.status = "ENDED";
@@ -146,10 +195,30 @@ class GameSession {
       }, 4500);
     } else {
       this.players.reduceAttempt(playerId);
+
+      if (this.areAllGuessersOutOfAttempts()) {
+        this.status = "ENDED";
+        this.timer.stop();
+        setTimeout(() => {
+          this.assignGameMaster();
+        }, 3000);
+      }
     }
     this.updateActivity(playerId);
     this.socket.emit("sync_state", this.getGameState().data);
     socket.emit("init_player", this.players.getPlayer(playerId).data);
+  }
+
+  areAllGuessersOutOfAttempts() {
+    const activePlayers = this.players
+      .getPlayers()
+      .filter((p) => p.id !== this.gameMaster);
+
+    if (activePlayers.length === 0) {
+      return true;
+    }
+
+    return activePlayers.every((p) => p.attempts <= 0);
   }
 
   assignGameMaster() {

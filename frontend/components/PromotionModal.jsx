@@ -19,7 +19,9 @@ export default function PromotionModal() {
       <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center space-y-6 transform animate-in zoom-in duration-300">
         <div className="text-6xl animate-bounce">👑</div>
         <div>
-          <h2 className="text-2xl font-black text-gray-800">It's Your Turn!</h2>
+          <h2 className="text-2xl font-black text-gray-800">
+            It&apos;s Your Turn!
+          </h2>
           <p className="text-gray-500 mt-2">
             The group needs a new Game Master. Do you want to lead the next
             round?
@@ -31,7 +33,7 @@ export default function PromotionModal() {
             onClick={() => handleDecision(true)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95"
           >
-            Yes, I'll do it! ✍️
+            Yes, I&apos;ll do it! ✍️
           </button>
           <button
             onClick={() => handleDecision(false)}

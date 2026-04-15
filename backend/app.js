@@ -7,9 +7,11 @@ const http = require("http");
 const server = http.createServer(app);
 
 const { Server } = require("socket.io");
+const ALLOWED_ORIGIN = process.env.CORS_ORIGIN || "*";
+
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: ALLOWED_ORIGIN,
     methods: ["GET", "POST"],
   },
 });
