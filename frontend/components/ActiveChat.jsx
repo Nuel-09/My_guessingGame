@@ -49,7 +49,9 @@ export default function ActiveChat() {
         {/* 1. Header: Question & Timer */}
         <div className="p-5 border-b border-white/15 flex justify-between items-center bg-black/20 text-white shadow-md w-full z-10">
           <div className="flex-1">
-            <p className="arena-heading text-[10px] text-cyan-300/90">Live Prompt</p>
+            <p className="arena-heading text-[10px] text-cyan-300/90">
+              Live Prompt
+            </p>
 
             <h2 className="font-bold text-lg leading-tight mt-1">
               {gameState.question}
