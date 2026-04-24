@@ -16,24 +16,26 @@ export default function Home() {
 
   return (
     <>
-      <div className="relative min-h-screen bg-gray-100">
+      <div className="relative min-h-screen ambient-grid">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
         {/* Persistent Leave Button - Visible on all game states */}
         <button
           onClick={() => {
             if (confirm("Leave game?")) leaveGame();
           }}
-          className="fixed bottom-6 right-6 z-[70] w-10 h-10 bg-black/10 hover:bg-red-500/20 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 transition-all active:scale-90 cursor-pointer"
+          className="fixed bottom-6 right-6 z-[70] h-11 px-4 glass-panel rounded-full flex items-center justify-center text-white/80 hover:text-white hover:border-white/50 transition-all active:scale-95 cursor-pointer gap-2"
           title="Leave Game"
         >
+          <span className="text-xs font-semibold tracking-wide">Exit</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#ef4444" // Tailwind red-500
+            stroke="currentColor"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="w-6 h-6"
+            className="w-4 h-4"
           >
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
@@ -47,9 +49,10 @@ export default function Home() {
         {/* Fallback for when the room is closed */}
         {gameState?.status === "CLOSED" && (
           <div className="h-screen flex items-center justify-center text-center p-10">
-            <h1 className="text-xl font-bold text-red-500">
-              {gameState.reason}
-            </h1>
+            <div className="glass-panel rounded-3xl px-10 py-8 max-w-lg rise-in">
+              <p className="arena-heading text-xs text-cyan-300 mb-3">Session Closed</p>
+              <h1 className="text-xl font-bold text-white">{gameState.reason}</h1>
+            </div>
           </div>
         )}
       </div>

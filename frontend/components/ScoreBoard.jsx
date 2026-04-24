@@ -14,20 +14,20 @@ export default function Scoreboard({ isOpen, onClose }) {
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm "
+        className="fixed inset-0 bg-slate-950/55 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Drawer Content */}
       <div
         className={`
-        relative w-full max-w-xs bg-white h-full shadow-2xl flex flex-col 
+        relative w-full max-w-xs glass-panel h-full shadow-2xl flex flex-col border-l border-white/20
         transition-transform duration-300 ease-in-out transform
         ${isOpen ? "translate-x-0" : "translate-x-full"}
       `}
       >
-        <div className="p-6 border-b flex justify-between items-center bg-blue-600 text-white">
-          <h2 className="text-xl font-bold">Leaderboard 🏆</h2>
+        <div className="p-6 border-b border-white/15 flex justify-between items-center bg-black/20 text-white">
+          <h2 className="text-xl font-bold">Leaderboard</h2>
           <button onClick={onClose} className="text-2xl font-bold">
             &times;
           </button>
@@ -41,26 +41,26 @@ export default function Scoreboard({ isOpen, onClose }) {
               .map((player, index) => (
                 <div
                   key={player.id}
-                  className="flex items-center justify-between p-4 rounded-xl border bg-gray-50 shadow-sm"
+                  className="flex items-center justify-between p-4 rounded-xl border border-white/20 bg-white/8 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="font-mono font-bold text-blue-600">
+                    <span className="font-mono font-bold text-cyan-300">
                       #{index + 1}
                     </span>
                     <div>
-                      <p className="font-bold text-gray-800">{player.name}</p>
-                      <p className="text-[10px] text-gray-400 uppercase font-semibold">
+                      <p className="font-bold text-white">{player.name}</p>
+                      <p className="text-[10px] text-slate-300/70 uppercase font-semibold">
                         {player.id === gameState.gameMaster
-                          ? "👑 Master"
+                          ? "Game Master"
                           : `${player.attempts} attempts left`}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-black text-blue-600">
+                    <p className="text-2xl font-black text-cyan-300">
                       {player.score}
                     </p>
-                    <p className="text-[8px] text-gray-400 uppercase font-bold">
+                    <p className="text-[8px] text-slate-300/70 uppercase font-bold">
                       Points
                     </p>
                   </div>
@@ -69,8 +69,8 @@ export default function Scoreboard({ isOpen, onClose }) {
           </div>
         </div>
 
-        <div className="p-6 bg-gray-50 border-t text-center">
-          <p className="text-xs text-gray-400">
+        <div className="p-6 bg-black/20 border-t border-white/15 text-center">
+          <p className="text-xs text-slate-300/70">
             Winning a round adds 10 points!
           </p>
         </div>

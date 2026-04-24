@@ -13,24 +13,27 @@ export default function GMSetup() {
   };
 
   return (
-    <div className="bg-blue-50 p-6 rounded-xl border-2 border-blue-200">
-      <h3 className="font-bold text-blue-800 mb-4">Create the Challenge</h3>
+    <div className="glass-panel p-6 rounded-2xl border border-white/25 text-left">
+      <h3 className="font-bold text-white text-xl mb-1">Craft This Round</h3>
+      <p className="text-sm text-slate-200/80 mb-4">
+        Define the clue and answer pair for everyone else to crack.
+      </p>
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
-          placeholder="Enter Question"
-          className="w-full p-2 border rounded text-black placeholder:text-gray-300 border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+          placeholder="Question prompt"
+          className="w-full p-3 rounded-xl border border-white/30 bg-white/10 text-white placeholder:text-white/40 outline-none focus:border-cyan-300"
           onChange={(e) => setQ(e.target.value)}
         />
         <input
-          placeholder="Enter Answer"
-          className="w-full p-2 border rounded text-black placeholder:text-gray-300 border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+          placeholder="Answer key"
+          className="w-full p-3 rounded-xl border border-white/30 bg-white/10 text-white placeholder:text-white/40 outline-none focus:border-cyan-300"
           onChange={(e) => setA(e.target.value)}
         />
         <button
-          className="w-full bg-green-600 cursor-pointer text-white py-2 rounded font-bold disabled:bg-gray-400 disabled:pointer-events-none hover:opacity-80 transition"
+          className="w-full bg-cyan-400 cursor-pointer text-slate-900 py-3 rounded-xl font-bold disabled:bg-slate-500 disabled:text-slate-300 disabled:pointer-events-none hover:bg-cyan-300 transition"
           disabled={!q || !a}
         >
-          Start Game 🚀
+          Launch Round
         </button>
       </form>
     </div>
