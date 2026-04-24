@@ -14,7 +14,9 @@ export default function EntryScreen() {
   return (
     <div className="relative flex min-h-screen items-center justify-center p-4">
       <div className="glass-panel rise-in w-full max-w-md rounded-3xl p-8 shadow-[0_18px_70px_rgba(0,0,0,0.35)]">
-        <p className="arena-heading text-xs text-cyan-300/90">Signal Hunt Arena</p>
+        <p className="arena-heading text-xs text-cyan-300/90">
+          Signal Hunt Arena
+        </p>
         <h1 className="mt-3 text-4xl font-black text-white leading-tight">
           Decode The
           <span className="block text-cyan-300">Room Challenge</span>
