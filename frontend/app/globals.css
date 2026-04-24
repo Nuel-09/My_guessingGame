@@ -18,8 +18,16 @@
 
 body {
   background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(53, 194, 255, 0.25), transparent 60%),
-    radial-gradient(700px 500px at 90% 10%, rgba(255, 200, 87, 0.2), transparent 65%),
+    radial-gradient(
+      1200px 600px at 10% -10%,
+      rgba(53, 194, 255, 0.25),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 500px at 90% 10%,
+      rgba(255, 200, 87, 0.2),
+      transparent 65%
+    ),
     linear-gradient(165deg, #050811 0%, #0b1224 45%, #0a1622 100%);
   color: var(--foreground);
   font-family: var(--font-space-grotesk), sans-serif;

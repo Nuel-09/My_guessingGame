@@ -50,8 +50,12 @@ export default function Home() {
         {gameState?.status === "CLOSED" && (
           <div className="h-screen flex items-center justify-center text-center p-10">
             <div className="glass-panel rounded-3xl px-10 py-8 max-w-lg rise-in">
-              <p className="arena-heading text-xs text-cyan-300 mb-3">Session Closed</p>
-              <h1 className="text-xl font-bold text-white">{gameState.reason}</h1>
+              <p className="arena-heading text-xs text-cyan-300 mb-3">
+                Session Closed
+              </p>
+              <h1 className="text-xl font-bold text-white">
+                {gameState.reason}
+              </h1>
             </div>
           </div>
         )}
